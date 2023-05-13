@@ -71,14 +71,75 @@ class War {
     this.saxonArmy.push(Saxon);
   }
 
-  vikingAttack() {}
-  saxonAttack() {}
+  vikingAttack() {
+    //Generate random soldiers
+    const randomSaxonIndex = Math.floor(Math.random() * this.saxonArmy.length);
+    const randomVikingIndex = Math.floor(
+      Math.random() * this.vikingArmy.length
+    );
+    const randomSaxon = this.saxonArmy[randomSaxonIndex];
+    const randomViking = this.vikingArmy[randomVikingIndex];
+    //Saxon receive damage from Viking
+    const result = randomSaxon.receiveDamage(randomViking.attack());
+    //If a Saxon dies remove it from the army
+    if (randomSaxon.health <= 0) {
+      this.saxonArmy.splice(randomSaxonIndex, 1);
+    }
+    // Return the result of the attack
+    return result;
+  }
+  saxonAttack() {
+    //Generate random soldiers
+    const randomSaxonIndex = Math.floor(Math.random() * this.saxonArmy.length);
+    const randomVikingIndex = Math.floor(
+      Math.random() * this.vikingArmy.length
+    );
+    const randomSaxon = this.saxonArmy[randomSaxonIndex];
+    const randomViking = this.vikingArmy[randomVikingIndex];
+    //Viking receive damage from Saxon
+    const result = randomViking.receiveDamage(randomSaxon.attack());
+    //If a Viking dies remove it from the army
+    if (randomViking.health <= 0) {
+      this.vikingArmy.splice(randomVikingIndex, 1);
+    }
+    // Return the result of the attack
+    return result;
+  }
+
+  soldierAttack(soldierType) {
+    //Generate random soldiers
+    const randomSaxonIndex = Math.floor(Math.random() * this.saxonArmy.length);
+    const randomVikingIndex = Math.floor(
+      Math.random() * this.vikingArmy.length
+    );
+    const randomSaxon = this.saxonArmy[randomSaxonIndex];
+    const randomViking = this.vikingArmy[randomVikingIndex];
+    //A soldier attacks
+    let result = "";
+    if (soldierType === "Viking") {
+      result = randomSaxon.receiveDamage(randomViking.attack());
+      //If a Saxon dies remove it from the army
+      if (randomSaxon.health <= 0) {
+        this.saxonArmy.splice(randomSaxonIndex, 1);
+      }
+    } else if (soldierType === "Saxon") {
+      result = randomViking.receiveDamage(randomSaxon.attack());
+      //If a Viking dies remove it from the army
+      if (randomViking.health <= 0) {
+        this.vikingArmy.splice(randomVikingIndex, 1);
+      }
+      return result;
+    }
+  }
 
   showStatus() {
-    if (this.vikingArmy.length === 0) {
+    //If saxonArmy is empty Vikings won
+    if (this.saxonArmy.length === 0) {
       return "Vikings have won the war of the century!";
-    } else if (this.saxonArmy.length === 0) {
+      //If vikingArmy is empty Saxons won
+    } else if (this.vikingArmy.length === 0) {
       return "Saxons have fought for their lives and survived another day...";
+      //Still fighting
     } else {
       return "Vikings and Saxons are still in the thick of battle.";
     }
